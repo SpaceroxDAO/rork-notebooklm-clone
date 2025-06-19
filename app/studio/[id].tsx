@@ -5,6 +5,7 @@ import { FileText, MessageSquare, Wand2, ChevronRight, Zap, Clock, Repeat, BookO
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import EmptyState from '@/components/EmptyState';
+import { Notebook } from '@/types/notebook';
 
 export default function Studio() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -194,7 +195,7 @@ export default function Studio() {
 }
 
 // Helper function to generate suggested automations based on notebook content
-function generateSuggestedAutomations(notebook) {
+function generateSuggestedAutomations(notebook: Notebook) {
   const automations = [];
   
   // Check if notebook has sources
