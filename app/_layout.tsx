@@ -66,8 +66,7 @@ function RootLayoutNav() {
         <Stack.Screen 
           name="home" 
           options={{ 
-            title: "NotebookLM",
-            headerLargeTitle: true,
+            headerShown: false, // Remove the header for home screen
           }} 
         />
         <Stack.Screen 
