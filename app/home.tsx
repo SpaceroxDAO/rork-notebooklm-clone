@@ -52,16 +52,11 @@ export default function Home() {
       padding: 16,
       paddingTop: 8,
     },
-    logoContainer: {
+    profileContainer: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      justifyContent: 'flex-end',
       alignItems: 'center',
       marginBottom: 16,
-    },
-    logo: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      color: colors.text,
     },
     profileButton: {
       width: 32,
@@ -170,8 +165,7 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.logoContainer}>
-          <Text style={styles.logo}>NotebookLM</Text>
+        <View style={styles.profileContainer}>
           <Pressable 
             style={styles.profileButton}
             onPress={() => setShowSettings(!showSettings)}
