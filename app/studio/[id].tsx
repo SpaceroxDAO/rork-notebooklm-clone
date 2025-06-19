@@ -1,19 +1,24 @@
-import React from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Pressable, ScrollView, TextInput } from 'react-native';
 import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
-import { FileText, MessageSquare, Wand2, ChevronRight, Zap, Clock, Repeat, BookOpen, PenTool, Sparkles } from 'lucide-react-native';
+import { FileText, MessageSquare, Wand2, ChevronRight, Zap, Search, Filter } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import EmptyState from '@/components/EmptyState';
 import { Notebook } from '@/types/notebook';
+import { getAutomationsForNotebook, Automation } from '@/mocks/automations';
 
 export default function Studio() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
   const { notebooks } = useNotebookStore();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   
-  const notebook = notebooks.find((n) => n.id === id);
+  const notebook = notebooks.find((n) => n.id === id) || 
+                  // Use mock data if not found in store
+                  require('@/mocks/notebooks').mockNotebooks.find((n: Notebook) => n.id === id);
   
   if (!notebook) {
     return (
@@ -24,17 +29,78 @@ export default function Studio() {
     );
   }
 
-  // Generate suggested automations based on notebook content
-  const suggestedAutomations = generateSuggestedAutomations(notebook);
+  // Get automations for this notebook
+  const automations = getAutomationsForNotebook(notebook);
+  
+  // Filter automations based on search and category
+  const filteredAutomations = automations.filter(automation => {
+    const matchesSearch = searchQuery === '' || 
+      automation.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      automation.description.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesCategory = selectedCategory === null || 
+      automation.category === selectedCategory;
+    
+    return matchesSearch && matchesCategory;
+  });
+  
+  const categories = [
+    { id: 'summary', label: 'Summary' },
+    { id: 'analysis', label: 'Analysis' },
+    { id: 'visualization', label: 'Visualization' },
+    { id: 'organization', label: 'Organization' },
+    { id: 'reminder', label: 'Reminder' }
+  ];
   
   const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.background,
     },
+    searchContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: colors.card,
+      borderRadius: 8,
+      paddingHorizontal: 12,
+      margin: 16,
+      marginBottom: 8,
+    },
+    searchInput: {
+      flex: 1,
+      height: 44,
+      color: colors.text,
+      marginLeft: 8,
+      fontSize: 16,
+    },
+    categoriesContainer: {
+      paddingHorizontal: 16,
+      marginBottom: 16,
+    },
+    categoriesScroll: {
+      flexDirection: 'row',
+    },
+    categoryButton: {
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      borderRadius: 16,
+      marginRight: 8,
+      backgroundColor: colors.card,
+    },
+    categoryButtonSelected: {
+      backgroundColor: colors.primary,
+    },
+    categoryText: {
+      color: colors.text,
+      fontSize: 14,
+    },
+    categoryTextSelected: {
+      color: '#FFFFFF',
+    },
     content: {
       flex: 1,
       padding: 16,
+      paddingTop: 0,
     },
     sectionTitle: {
       fontSize: 18,
@@ -88,18 +154,6 @@ export default function Studio() {
       fontWeight: 'bold',
       marginRight: 8,
     },
-    emptyContainer: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 24,
-    },
-    emptyText: {
-      fontSize: 16,
-      color: colors.textSecondary,
-      textAlign: 'center',
-      marginTop: 16,
-    },
     bottomNav: {
       flexDirection: 'row',
       borderTopWidth: 1,
@@ -139,12 +193,58 @@ export default function Studio() {
         }}
       />
       
+      <View style={styles.searchContainer}>
+        <Search size={20} color={colors.textSecondary} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search automations"
+          placeholderTextColor={colors.textSecondary}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+      </View>
+      
+      <View style={styles.categoriesContainer}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesScroll}>
+          <Pressable
+            style={[styles.categoryButton, selectedCategory === null && styles.categoryButtonSelected]}
+            onPress={() => setSelectedCategory(null)}
+          >
+            <Text style={[styles.categoryText, selectedCategory === null && styles.categoryTextSelected]}>
+              All
+            </Text>
+          </Pressable>
+          
+          {categories.map(category => (
+            <Pressable
+              key={category.id}
+              style={[
+                styles.categoryButton,
+                selectedCategory === category.id && styles.categoryButtonSelected
+              ]}
+              onPress={() => setSelectedCategory(category.id)}
+            >
+              <Text 
+                style={[
+                  styles.categoryText,
+                  selectedCategory === category.id && styles.categoryTextSelected
+                ]}
+              >
+                {category.label}
+              </Text>
+            </Pressable>
+          ))}
+        </ScrollView>
+      </View>
+      
       <ScrollView style={styles.content}>
-        <Text style={styles.sectionTitle}>Suggested Automations</Text>
+        <Text style={styles.sectionTitle}>
+          {searchQuery ? 'Search Results' : 'Suggested Automations'}
+        </Text>
         
-        {suggestedAutomations.length > 0 ? (
-          suggestedAutomations.map((automation, index) => (
-            <View key={index} style={styles.card}>
+        {filteredAutomations.length > 0 ? (
+          filteredAutomations.map((automation, index) => (
+            <View key={automation.id || index} style={styles.card}>
               <View style={styles.cardHeader}>
                 <View style={styles.iconContainer}>
                   {automation.icon}
@@ -153,7 +253,10 @@ export default function Studio() {
                 <ChevronRight size={20} color={colors.textSecondary} />
               </View>
               <Text style={styles.cardDescription}>{automation.description}</Text>
-              <Pressable style={styles.cardButton} onPress={() => console.log(`Run automation: ${automation.title}`)}>
+              <Pressable 
+                style={styles.cardButton} 
+                onPress={() => console.log(`Run automation: ${automation.title}`)}
+              >
                 <Text style={styles.cardButtonText}>Run</Text>
                 <Zap size={16} color="#FFFFFF" />
               </Pressable>
@@ -161,8 +264,10 @@ export default function Studio() {
           ))
         ) : (
           <EmptyState
-            title="No automations yet"
-            description="Add more content to your notebook to get automation suggestions"
+            title="No automations found"
+            description={searchQuery 
+              ? "Try a different search term or category" 
+              : "Add more content to your notebook to get automation suggestions"}
             icon={<Wand2 size={64} color={colors.textSecondary} />}
           />
         )}
@@ -192,48 +297,4 @@ export default function Studio() {
       </View>
     </View>
   );
-}
-
-// Helper function to generate suggested automations based on notebook content
-function generateSuggestedAutomations(notebook: Notebook) {
-  const automations = [];
-  
-  // Check if notebook has sources
-  if (notebook.sources.length > 0) {
-    automations.push({
-      title: "Generate Summary",
-      description: "Create a concise summary of all your sources in this notebook.",
-      icon: <BookOpen size={20} color="#4285F4" />,
-    });
-  }
-  
-  // Check if notebook has messages
-  if (notebook.messages.length > 0) {
-    automations.push({
-      title: "Extract Key Insights",
-      description: "Identify and extract the most important insights from your conversations.",
-      icon: <Sparkles size={20} color="#34A853" />,
-    });
-  }
-  
-  // Add some generic automations
-  automations.push({
-    title: "Schedule Weekly Review",
-    description: "Set up a weekly reminder to review and update this notebook.",
-    icon: <Clock size={20} color="#FBBC05" />,
-  });
-  
-  automations.push({
-    title: "Create Study Guide",
-    description: "Transform your notebook into a structured study guide with practice questions.",
-    icon: <PenTool size={20} color="#EA4335" />,
-  });
-  
-  automations.push({
-    title: "Set Up Regular Updates",
-    description: "Automatically check for updates to your sources and notify you of changes.",
-    icon: <Repeat size={20} color="#4285F4" />,
-  });
-  
-  return automations;
 }

@@ -1,11 +1,12 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable, TextInput, Image, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Search, Plus, Settings, BookOpen, FileText } from 'lucide-react-native';
+import { Search, Plus, Settings } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import NotebookCard from '@/components/NotebookCard';
 import EmptyState from '@/components/EmptyState';
 import { useThemeColors } from '@/hooks/useThemeColors';
+import { mockNotebooks } from '@/mocks/notebooks';
 
 export default function Home() {
   const router = useRouter();
@@ -14,6 +15,16 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('recent');
   const [showSettings, setShowSettings] = useState(false);
+  
+  // Combine store notebooks with mock notebooks for demo purposes
+  useEffect(() => {
+    if (notebooks.length === 0) {
+      // Add mock notebooks to store if none exist
+      mockNotebooks.forEach(notebook => {
+        createNotebook(notebook.title, notebook.emoji);
+      });
+    }
+  }, []);
   
   const filteredNotebooks = notebooks.filter((notebook) => 
     notebook.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -187,7 +198,7 @@ export default function Home() {
         <EmptyState
           title="No notebooks yet"
           description="Create your first notebook to get started"
-          icon={<BookOpen size={64} color={colors.textSecondary} />}
+          icon={<Plus size={64} color={colors.textSecondary} />}
         />
       ) : (
         <FlatList
