@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
-import { FileText, Play, Pause, SkipBack, SkipForward, Share2, Download, MessageSquare, Wand2 } from 'lucide-react-native';
+import { FileText, MessageSquare, Wand2, ChevronRight, Zap, Clock, Repeat, BookOpen, PenTool, Sparkles } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import EmptyState from '@/components/EmptyState';
@@ -11,9 +11,6 @@ export default function Studio() {
   const router = useRouter();
   const colors = useThemeColors();
   const { notebooks } = useNotebookStore();
-  
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
   
   const notebook = notebooks.find((n) => n.id === id);
   
@@ -25,120 +22,82 @@ export default function Studio() {
       />
     );
   }
-  
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-    
-    // Simulate progress
-    if (!isPlaying) {
-      const interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            setIsPlaying(false);
-            return 100;
-          }
-          return prev + 1;
-        });
-      }, 300);
-    }
-  };
+
+  // Generate suggested automations based on notebook content
+  const suggestedAutomations = generateSuggestedAutomations(notebook);
   
   const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.background,
     },
-    headerButtons: {
-      flexDirection: 'row',
-    },
-    headerButton: {
-      padding: 8,
-      marginLeft: 8,
-    },
     content: {
       flex: 1,
-      justifyContent: 'center',
       padding: 16,
     },
-    waveformContainer: {
-      height: 200,
-      borderRadius: 12,
-      overflow: 'hidden',
-      marginBottom: 24,
-      position: 'relative',
-    },
-    waveform: {
-      width: '100%',
-      height: '100%',
-    },
-    waveformOverlay: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0,0,0,0.3)',
-    },
-    waveformProgress: {
-      height: '100%',
-      backgroundColor: 'rgba(66, 133, 244, 0.3)',
-    },
-    progressContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: 24,
-    },
-    timeText: {
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
       color: colors.text,
-      fontSize: 14,
-      width: 40,
+      marginBottom: 16,
     },
-    progressBar: {
-      flex: 1,
-      height: 4,
-      backgroundColor: colors.border,
-      borderRadius: 2,
-      marginHorizontal: 8,
-    },
-    progress: {
-      height: '100%',
-      backgroundColor: colors.primary,
-      borderRadius: 2,
-    },
-    controls: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: 24,
-    },
-    controlButton: {
+    card: {
+      backgroundColor: colors.card,
+      borderRadius: 12,
       padding: 16,
+      marginBottom: 16,
     },
-    playPauseButton: {
-      width: 64,
-      height: 64,
-      borderRadius: 32,
-      backgroundColor: colors.primary,
+    cardHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 12,
+    },
+    iconContainer: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: `${colors.primary}20`,
       alignItems: 'center',
       justifyContent: 'center',
-      marginHorizontal: 24,
+      marginRight: 12,
     },
-    joinContainer: {
-      alignItems: 'center',
+    cardTitle: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: colors.text,
+      flex: 1,
     },
-    joinButton: {
-      backgroundColor: colors.primary,
-      borderRadius: 24,
-      paddingVertical: 12,
-      paddingHorizontal: 24,
+    cardDescription: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      marginBottom: 16,
+      lineHeight: 20,
+    },
+    cardButton: {
+      flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
+      backgroundColor: colors.primary,
+      borderRadius: 8,
+      paddingVertical: 8,
+      paddingHorizontal: 16,
     },
-    joinButtonText: {
+    cardButtonText: {
       color: '#FFFFFF',
       fontWeight: 'bold',
+      marginRight: 8,
+    },
+    emptyContainer: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 24,
+    },
+    emptyText: {
       fontSize: 16,
+      color: colors.textSecondary,
+      textAlign: 'center',
+      marginTop: 16,
     },
     bottomNav: {
       flexDirection: 'row',
@@ -170,69 +129,48 @@ export default function Studio() {
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: notebook.title,
+          title: "Automate",
           headerRight: () => (
-            <View style={styles.headerButtons}>
-              <Pressable style={styles.headerButton}>
-                <Share2 size={20} color={colors.text} />
-              </Pressable>
-              <Pressable style={styles.headerButton}>
-                <Download size={20} color={colors.text} />
-              </Pressable>
-            </View>
+            <Pressable onPress={() => console.log("Create custom automation")}>
+              <Wand2 size={24} color={colors.text} />
+            </Pressable>
           ),
         }}
       />
       
-      <View style={styles.content}>
-        <View style={styles.waveformContainer}>
-          <Image 
-            source={{ uri: 'https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80' }}
-            style={styles.waveform}
-            resizeMode="cover"
+      <ScrollView style={styles.content}>
+        <Text style={styles.sectionTitle}>Suggested Automations</Text>
+        
+        {suggestedAutomations.length > 0 ? (
+          suggestedAutomations.map((automation, index) => (
+            <View key={index} style={styles.card}>
+              <View style={styles.cardHeader}>
+                <View style={styles.iconContainer}>
+                  {automation.icon}
+                </View>
+                <Text style={styles.cardTitle}>{automation.title}</Text>
+                <ChevronRight size={20} color={colors.textSecondary} />
+              </View>
+              <Text style={styles.cardDescription}>{automation.description}</Text>
+              <Pressable style={styles.cardButton} onPress={() => console.log(`Run automation: ${automation.title}`)}>
+                <Text style={styles.cardButtonText}>Run</Text>
+                <Zap size={16} color="#FFFFFF" />
+              </Pressable>
+            </View>
+          ))
+        ) : (
+          <EmptyState
+            title="No automations yet"
+            description="Add more content to your notebook to get automation suggestions"
+            icon={<Wand2 size={64} color={colors.textSecondary} />}
           />
-          <View style={styles.waveformOverlay}>
-            <View style={[styles.waveformProgress, { width: `${progress}%` }]} />
-          </View>
-        </View>
-        
-        <View style={styles.progressContainer}>
-          <Text style={styles.timeText}>0:00</Text>
-          <View style={styles.progressBar}>
-            <View style={[styles.progress, { width: `${progress}%` }]} />
-          </View>
-          <Text style={styles.timeText}>27:15</Text>
-        </View>
-        
-        <View style={styles.controls}>
-          <Pressable style={styles.controlButton}>
-            <SkipBack size={24} color={colors.text} />
-          </Pressable>
-          
-          <Pressable style={styles.playPauseButton} onPress={togglePlayPause}>
-            {isPlaying ? (
-              <Pause size={32} color="#FFFFFF" />
-            ) : (
-              <Play size={32} color="#FFFFFF" />
-            )}
-          </Pressable>
-          
-          <Pressable style={styles.controlButton}>
-            <SkipForward size={24} color={colors.text} />
-          </Pressable>
-        </View>
-        
-        <View style={styles.joinContainer}>
-          <Pressable style={styles.joinButton}>
-            <Text style={styles.joinButtonText}>Join</Text>
-          </Pressable>
-        </View>
-      </View>
+        )}
+      </ScrollView>
       
       <View style={styles.bottomNav}>
         <Pressable 
           style={styles.navButton}
-          onPress={() => router.push(`/sources/${notebook.id}`)}
+          onPress={() => router.push(`/notebook/${notebook.id}`)}
         >
           <FileText size={24} color={colors.textSecondary} />
           <Text style={styles.navButtonText}>Sources</Text>
@@ -253,4 +191,48 @@ export default function Studio() {
       </View>
     </View>
   );
+}
+
+// Helper function to generate suggested automations based on notebook content
+function generateSuggestedAutomations(notebook) {
+  const automations = [];
+  
+  // Check if notebook has sources
+  if (notebook.sources.length > 0) {
+    automations.push({
+      title: "Generate Summary",
+      description: "Create a concise summary of all your sources in this notebook.",
+      icon: <BookOpen size={20} color="#4285F4" />,
+    });
+  }
+  
+  // Check if notebook has messages
+  if (notebook.messages.length > 0) {
+    automations.push({
+      title: "Extract Key Insights",
+      description: "Identify and extract the most important insights from your conversations.",
+      icon: <Sparkles size={20} color="#34A853" />,
+    });
+  }
+  
+  // Add some generic automations
+  automations.push({
+    title: "Schedule Weekly Review",
+    description: "Set up a weekly reminder to review and update this notebook.",
+    icon: <Clock size={20} color="#FBBC05" />,
+  });
+  
+  automations.push({
+    title: "Create Study Guide",
+    description: "Transform your notebook into a structured study guide with practice questions.",
+    icon: <PenTool size={20} color="#EA4335" />,
+  });
+  
+  automations.push({
+    title: "Set Up Regular Updates",
+    description: "Automatically check for updates to your sources and notify you of changes.",
+    icon: <Repeat size={20} color="#4285F4" />,
+  });
+  
+  return automations;
 }

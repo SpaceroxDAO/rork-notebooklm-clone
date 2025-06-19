@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, FlatList, Pressable, TextInput, Image, ScrollView, Modal } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Pressable, TextInput, Image, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Search, Plus, Settings, BookOpen, Users, FileText, Download } from 'lucide-react-native';
+import { Search, Plus, Settings, BookOpen, FileText } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import NotebookCard from '@/components/NotebookCard';
 import EmptyState from '@/components/EmptyState';
@@ -51,12 +51,9 @@ export default function Home() {
     header: {
       padding: 16,
       paddingTop: 8,
-    },
-    headerTop: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: 16,
     },
     appTitle: {
       fontSize: 20,
@@ -82,6 +79,8 @@ export default function Home() {
       backgroundColor: colors.card,
       borderRadius: 8,
       paddingHorizontal: 12,
+      margin: 16,
+      marginTop: 0,
     },
     searchInput: {
       flex: 1,
@@ -121,29 +120,6 @@ export default function Home() {
       fontWeight: 'bold',
       marginLeft: 8,
     },
-    folderIcon: {
-      width: 80,
-      height: 60,
-      position: 'relative',
-    },
-    folderBack: {
-      position: 'absolute',
-      width: 70,
-      height: 50,
-      backgroundColor: colors.text,
-      borderRadius: 4,
-      top: 10,
-      left: 5,
-    },
-    folderFront: {
-      position: 'absolute',
-      width: 80,
-      height: 40,
-      backgroundColor: colors.text,
-      borderRadius: 4,
-      top: 20,
-      left: 0,
-    },
     settingsDropdown: {
       position: 'absolute',
       top: 50,
@@ -173,30 +149,29 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <Text style={styles.appTitle}>NotebookLM</Text>
-          <View style={styles.profileContainer}>
-            <Pressable 
-              style={styles.profileButton}
-              onPress={() => setShowSettings(!showSettings)}
-            >
-              <Image 
-                source={{ uri: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80' }} 
-                style={styles.profileImage} 
-              />
-            </Pressable>
-          </View>
+        <Text style={styles.appTitle}>NotebookLM</Text>
+        <View style={styles.profileContainer}>
+          <Pressable 
+            style={styles.profileButton}
+            onPress={() => setShowSettings(!showSettings)}
+          >
+            <Image 
+              source={{ uri: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80' }} 
+              style={styles.profileImage} 
+            />
+          </Pressable>
         </View>
-        <View style={styles.searchContainer}>
-          <Search size={20} color={colors.textSecondary} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search notebooks"
-            placeholderTextColor={colors.textSecondary}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-        </View>
+      </View>
+      
+      <View style={styles.searchContainer}>
+        <Search size={20} color={colors.textSecondary} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search notebooks"
+          placeholderTextColor={colors.textSecondary}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
       </View>
       
       <View style={styles.tabsContainer}>
