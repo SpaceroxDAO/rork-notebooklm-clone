@@ -21,7 +21,7 @@ export default function Index() {
       } else if (!hasSeenOnboarding) {
         router.replace('/onboarding');
       } else if (notebooks.length > 0) {
-        router.replace('/home');
+        router.replace('/chat'); // Changed from /home to /chat
       } else {
         router.replace('/onboarding');
       }

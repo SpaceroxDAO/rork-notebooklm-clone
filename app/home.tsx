@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable, TextInput, Image, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Search, Plus, Settings } from 'lucide-react-native';
+import { Search, Plus, Settings, MessageSquare } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import NotebookCard from '@/components/NotebookCard';
 import EmptyState from '@/components/EmptyState';
@@ -70,6 +70,13 @@ export default function Home() {
       fontSize: 20,
       fontWeight: 'bold',
       color: colors.text,
+    },
+    headerActions: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    chatButton: {
+      marginRight: 16,
     },
     profileContainer: {
       alignItems: 'flex-end',
@@ -161,16 +168,24 @@ export default function Home() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.appTitle}>NotebookLM</Text>
-        <View style={styles.profileContainer}>
+        <View style={styles.headerActions}>
           <Pressable 
-            style={styles.profileButton}
-            onPress={() => setShowSettings(!showSettings)}
+            style={styles.chatButton}
+            onPress={() => router.push('/chat')}
           >
-            <Image 
-              source={{ uri: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80' }} 
-              style={styles.profileImage} 
-            />
+            <MessageSquare size={24} color={colors.text} />
           </Pressable>
+          <View style={styles.profileContainer}>
+            <Pressable 
+              style={styles.profileButton}
+              onPress={() => setShowSettings(!showSettings)}
+            >
+              <Image 
+                source={{ uri: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80' }} 
+                style={styles.profileImage} 
+              />
+            </Pressable>
+          </View>
         </View>
       </View>
       

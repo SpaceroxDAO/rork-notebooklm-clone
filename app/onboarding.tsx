@@ -98,8 +98,8 @@ const slides = [
   },
   {
     id: '4',
-    title: "Listen & learn on the go",
-    subtitle: "Turn your sources into engaging audio discussions with one click",
+    title: "Chat with all your knowledge",
+    subtitle: "Access insights across all your notebooks with a unified chat interface",
     icon: <Headphones size={64} color="#34A853" />,
     titleColor: '#34A853',
   },
@@ -124,12 +124,12 @@ export default function Onboarding() {
         animated: true,
       });
     } else {
-      router.replace('/home');
+      router.replace('/chat'); // Changed from /home to /chat
     }
   };
   
   const goToHome = () => {
-    router.replace('/home');
+    router.replace('/chat'); // Changed from /home to /chat
   };
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, Switch } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
-import { ChevronRight, LogOut, Moon, Sun, User, CreditCard, BrainCircuit, Mail, Calendar, Lock, Bell, HelpCircle, Info } from 'lucide-react-native';
+import { ChevronRight, LogOut, Moon, Sun, User, CreditCard, BrainCircuit, Mail, Calendar, Lock, Bell, HelpCircle, Info, MessageSquare } from 'lucide-react-native';
 import { useThemeStore } from '@/store/themeStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
 
@@ -126,6 +126,16 @@ export default function Settings() {
         
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>NotebookLM Intelligence</Text>
+          <Pressable 
+            style={styles.menuItem}
+            onPress={() => router.push('/chat')}
+          >
+            <View style={styles.menuItemLeft}>
+              <MessageSquare size={20} color={colors.text} style={styles.menuItemIcon} />
+              <Text style={styles.menuItemText}>Global Chat</Text>
+            </View>
+            <ChevronRight size={20} color={colors.textSecondary} />
+          </Pressable>
           <Pressable style={styles.menuItem}>
             <View style={styles.menuItemLeft}>
               <BrainCircuit size={20} color={colors.text} style={styles.menuItemIcon} />

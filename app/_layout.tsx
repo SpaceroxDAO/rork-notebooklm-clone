@@ -70,6 +70,12 @@ function RootLayoutNav() {
           }} 
         />
         <Stack.Screen 
+          name="chat" 
+          options={{ 
+            headerShown: false, // Remove the header for global chat
+          }} 
+        />
+        <Stack.Screen 
           name="notebook/[id]" 
           options={{ 
             title: "",
