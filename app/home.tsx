@@ -52,11 +52,19 @@ export default function Home() {
       padding: 16,
       paddingTop: 8,
     },
-    profileContainer: {
+    headerTop: {
       flexDirection: 'row',
-      justifyContent: 'flex-end',
+      justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: 16,
+    },
+    appTitle: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: colors.text,
+    },
+    profileContainer: {
+      alignItems: 'flex-end',
     },
     profileButton: {
       width: 32,
@@ -165,16 +173,19 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.profileContainer}>
-          <Pressable 
-            style={styles.profileButton}
-            onPress={() => setShowSettings(!showSettings)}
-          >
-            <Image 
-              source={{ uri: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80' }} 
-              style={styles.profileImage} 
-            />
-          </Pressable>
+        <View style={styles.headerTop}>
+          <Text style={styles.appTitle}>NotebookLM</Text>
+          <View style={styles.profileContainer}>
+            <Pressable 
+              style={styles.profileButton}
+              onPress={() => setShowSettings(!showSettings)}
+            >
+              <Image 
+                source={{ uri: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80' }} 
+                style={styles.profileImage} 
+              />
+            </Pressable>
+          </View>
         </View>
         <View style={styles.searchContainer}>
           <Search size={20} color={colors.textSecondary} />
