@@ -41,6 +41,11 @@ export default function GlobalChat() {
     }
   }, [messages.length]);
   
+  // Generate a truly unique ID
+  const generateUniqueId = (prefix: string) => {
+    return `${prefix}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}-${Math.random().toString(36).substring(2, 9)}`;
+  };
+  
   const handleSendMessage = async () => {
     if (!message.trim()) return;
     
@@ -48,7 +53,7 @@ export default function GlobalChat() {
     setMessage('');
     
     // Add user message with a unique ID
-    const userMessageId = `user-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    const userMessageId = generateUniqueId('user');
     
     addMessage({
       id: userMessageId,
@@ -70,7 +75,7 @@ export default function GlobalChat() {
       const { text, citations } = await generateResponse(userMessage, allSources);
       
       // Add AI response with a unique ID
-      const assistantMessageId = `assistant-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+      const assistantMessageId = generateUniqueId('assistant');
       
       addMessage({
         id: assistantMessageId,
@@ -83,7 +88,7 @@ export default function GlobalChat() {
       console.error('Error generating response:', error);
       
       // Add error message with a unique ID
-      const errorMessageId = `error-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+      const errorMessageId = generateUniqueId('error');
       
       addMessage({
         id: errorMessageId,
