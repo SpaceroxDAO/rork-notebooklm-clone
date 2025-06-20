@@ -182,11 +182,12 @@ export default function GlobalChat() {
       alignItems: 'center',
       justifyContent: 'space-between',
       padding: 16,
+      paddingTop: 8,
       borderBottomWidth: 1,
       borderBottomColor: colors.border,
     },
     headerTitle: {
-      fontSize: 18,
+      fontSize: 20,
       fontWeight: 'bold',
       color: colors.text,
     },
@@ -195,8 +196,7 @@ export default function GlobalChat() {
       alignItems: 'center',
     },
     headerButton: {
-      padding: 8,
-      marginLeft: 8,
+      marginRight: 16,
     },
     profileContainer: {
       alignItems: 'flex-end',
