@@ -244,7 +244,7 @@ export default function Studio() {
         
         {filteredAutomations.length > 0 ? (
           filteredAutomations.map((automation, index) => (
-            <View key={automation.id || index} style={styles.card}>
+            <View key={`${automation.id || 'auto'}-${index}`} style={styles.card}>
               <View style={styles.cardHeader}>
                 <View style={styles.iconContainer}>
                   {automation.icon}

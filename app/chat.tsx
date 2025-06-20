@@ -47,9 +47,11 @@ export default function GlobalChat() {
     const userMessage = message.trim();
     setMessage('');
     
-    // Add user message
+    // Add user message with a unique ID
+    const userMessageId = `user-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    
     addMessage({
-      id: Date.now().toString(),
+      id: userMessageId,
       role: 'user',
       content: userMessage,
       timestamp: new Date().toISOString(),
@@ -67,9 +69,11 @@ export default function GlobalChat() {
       
       const { text, citations } = await generateResponse(userMessage, allSources);
       
-      // Add AI response
+      // Add AI response with a unique ID
+      const assistantMessageId = `assistant-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+      
       addMessage({
-        id: Date.now().toString(),
+        id: assistantMessageId,
         role: 'assistant',
         content: text,
         timestamp: new Date().toISOString(),
@@ -78,9 +82,11 @@ export default function GlobalChat() {
     } catch (error) {
       console.error('Error generating response:', error);
       
-      // Add error message
+      // Add error message with a unique ID
+      const errorMessageId = `error-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+      
       addMessage({
-        id: Date.now().toString(),
+        id: errorMessageId,
         role: 'assistant',
         content: "I'm sorry, I couldn't generate a response. Please try again later.",
         timestamp: new Date().toISOString(),
