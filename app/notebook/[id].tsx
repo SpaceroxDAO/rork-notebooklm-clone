@@ -17,6 +17,7 @@ export default function NotebookDetail() {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [title, setTitle] = useState('');
   const [isAddSourceModalVisible, setIsAddSourceModalVisible] = useState(false);
+  const [showOptionsMenu, setShowOptionsMenu] = useState(false);
   
   const notebook = notebooks.find((n) => n.id === id);
   
@@ -209,6 +210,34 @@ export default function NotebookDetail() {
     activeNavButtonText: {
       color: colors.primary,
     },
+    optionsMenu: {
+      position: 'absolute',
+      top: 50,
+      right: 16,
+      backgroundColor: colors.card,
+      borderRadius: 8,
+      padding: 8,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+      elevation: 5,
+      zIndex: 1000,
+    },
+    optionItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 12,
+      borderRadius: 4,
+    },
+    optionText: {
+      color: colors.text,
+      fontSize: 16,
+      marginLeft: 8,
+    },
+    deleteOption: {
+      color: colors.error,
+    },
   });
 
   return (
@@ -217,12 +246,35 @@ export default function NotebookDetail() {
         options={{
           title: notebook.title,
           headerRight: () => (
-            <Pressable onPress={() => Alert.alert("Options", "More options coming soon")}>
+            <Pressable onPress={() => setShowOptionsMenu(!showOptionsMenu)}>
               <MoreVertical size={24} color={colors.text} />
             </Pressable>
           ),
         }}
       />
+      
+      {showOptionsMenu && (
+        <View style={styles.optionsMenu}>
+          <Pressable 
+            style={styles.optionItem}
+            onPress={() => {
+              setShowOptionsMenu(false);
+              setIsEditingTitle(true);
+            }}
+          >
+            <Text style={styles.optionText}>Rename</Text>
+          </Pressable>
+          <Pressable 
+            style={styles.optionItem}
+            onPress={() => {
+              setShowOptionsMenu(false);
+              handleDeleteNotebook();
+            }}
+          >
+            <Text style={[styles.optionText, styles.deleteOption]}>Delete</Text>
+          </Pressable>
+        </View>
+      )}
       
       <View style={styles.header}>
         <Text style={styles.emoji}>{notebook.emoji}</Text>
