@@ -93,6 +93,10 @@ export default function Studio() {
       flex: 1,
       backgroundColor: colors.background,
     },
+    headerButton: {
+      paddingHorizontal: 8,
+      paddingVertical: 4,
+    },
     searchContainer: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -222,7 +226,7 @@ export default function Studio() {
         options={{
           title: "Automate",
           headerRight: () => (
-            <Pressable onPress={() => console.log("Create custom automation")}>
+            <Pressable style={styles.headerButton} onPress={() => console.log("Create custom automation")}>
               <Wand2 size={24} color={colors.text} />
             </Pressable>
           ),

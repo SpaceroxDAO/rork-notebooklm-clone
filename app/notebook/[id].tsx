@@ -86,11 +86,9 @@ export default function NotebookDetail() {
       flex: 1,
       backgroundColor: colors.background,
     },
-    headerButtonText: {
-      color: colors.text,
-      fontSize: 18,
-      fontWeight: 'bold',
+    headerButton: {
       paddingHorizontal: 8,
+      paddingVertical: 4,
     },
     header: {
       padding: 16,
@@ -260,7 +258,7 @@ export default function NotebookDetail() {
         options={{
           title: notebook.title,
           headerRight: () => (
-            <Pressable onPress={() => setShowOptionsMenu(!showOptionsMenu)}>
+            <Pressable style={styles.headerButton} onPress={() => setShowOptionsMenu(!showOptionsMenu)}>
               <MoreVertical size={24} color={colors.text} />
             </Pressable>
           ),

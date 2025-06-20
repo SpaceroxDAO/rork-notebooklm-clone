@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Pressable, FlatList, ActivityIndicator, Keyboard } from 'react-native';
 import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
-import { Send, FileText, MessageSquare, Wand2 } from 'lucide-react-native';
+import { Send, FileText, MessageSquare, Wand2, MoreVertical } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import MessageBubble from '@/components/MessageBubble';
@@ -83,12 +83,8 @@ export default function Chat() {
       backgroundColor: colors.background,
     },
     headerButton: {
-      padding: 8,
-    },
-    headerButtonText: {
-      color: colors.text,
-      fontSize: 18,
-      fontWeight: 'bold',
+      paddingHorizontal: 8,
+      paddingVertical: 4,
     },
     messagesList: {
       padding: 16,
@@ -109,14 +105,13 @@ export default function Chat() {
     },
     inputContainer: {
       position: 'absolute',
-      bottom: 0,
+      bottom: 60,
       left: 0,
       right: 0,
       backgroundColor: colors.background,
       borderTopWidth: 1,
       borderTopColor: colors.border,
       padding: 16,
-      paddingBottom: 24,
     },
     inputRow: {
       flexDirection: 'row',
@@ -149,13 +144,17 @@ export default function Chat() {
       color: colors.textSecondary,
       fontSize: 12,
       marginTop: 8,
-      marginBottom: 8,
     },
     bottomNav: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
       flexDirection: 'row',
       borderTopWidth: 1,
       borderTopColor: colors.border,
-      paddingTop: 8,
+      backgroundColor: colors.background,
+      paddingVertical: 8,
     },
     navButton: {
       flex: 1,
@@ -184,7 +183,7 @@ export default function Chat() {
           title: notebook.title,
           headerRight: () => (
             <Pressable style={styles.headerButton}>
-              <Text style={styles.headerButtonText}>•••</Text>
+              <MoreVertical size={24} color={colors.text} />
             </Pressable>
           ),
         }}
@@ -241,29 +240,29 @@ export default function Chat() {
         <Text style={styles.disclaimer}>
           NotebookLM can be inaccurate, so double-check.
         </Text>
+      </View>
+      
+      <View style={styles.bottomNav}>
+        <Pressable 
+          style={styles.navButton}
+          onPress={() => router.push(`/notebook/${notebook.id}`)}
+        >
+          <FileText size={24} color={colors.textSecondary} />
+          <Text style={styles.navButtonText}>Sources</Text>
+        </Pressable>
         
-        <View style={styles.bottomNav}>
-          <Pressable 
-            style={styles.navButton}
-            onPress={() => router.push(`/notebook/${notebook.id}`)}
-          >
-            <FileText size={24} color={colors.textSecondary} />
-            <Text style={styles.navButtonText}>Sources</Text>
-          </Pressable>
-          
-          <Pressable style={[styles.navButton, styles.activeNavButton]}>
-            <MessageSquare size={24} color={colors.primary} />
-            <Text style={[styles.navButtonText, styles.activeNavButtonText]}>Chat</Text>
-          </Pressable>
-          
-          <Pressable 
-            style={styles.navButton}
-            onPress={() => router.push(`/studio/${notebook.id}`)}
-          >
-            <Wand2 size={24} color={colors.textSecondary} />
-            <Text style={styles.navButtonText}>Automate</Text>
-          </Pressable>
-        </View>
+        <Pressable style={[styles.navButton, styles.activeNavButton]}>
+          <MessageSquare size={24} color={colors.primary} />
+          <Text style={[styles.navButtonText, styles.activeNavButtonText]}>Chat</Text>
+        </Pressable>
+        
+        <Pressable 
+          style={styles.navButton}
+          onPress={() => router.push(`/studio/${notebook.id}`)}
+        >
+          <Wand2 size={24} color={colors.textSecondary} />
+          <Text style={styles.navButtonText}>Automate</Text>
+        </Pressable>
       </View>
     </View>
   );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
 import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
-import { FileText, MessageSquare, Wand2, Plus } from 'lucide-react-native';
+import { FileText, MessageSquare, Wand2, Plus, MoreVertical } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import SourceItem from '@/components/SourceItem';
@@ -81,12 +81,8 @@ export default function Sources() {
       backgroundColor: colors.background,
     },
     headerButton: {
-      padding: 8,
-    },
-    headerButtonText: {
-      color: colors.text,
-      fontSize: 18,
-      fontWeight: 'bold',
+      paddingHorizontal: 8,
+      paddingVertical: 4,
     },
     header: {
       padding: 16,
@@ -196,7 +192,7 @@ export default function Sources() {
           title: notebook.title,
           headerRight: () => (
             <Pressable style={styles.headerButton}>
-              <Text style={styles.headerButtonText}>•••</Text>
+              <MoreVertical size={24} color={colors.text} />
             </Pressable>
           ),
         }}
