@@ -1,12 +1,40 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView, TextInput } from 'react-native';
 import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
-import { FileText, MessageSquare, Wand2, ChevronRight, Zap, Search, Filter } from 'lucide-react-native';
+import { 
+  FileText, 
+  MessageSquare, 
+  Wand2, 
+  ChevronRight, 
+  Zap, 
+  Search, 
+  Filter,
+  BookOpen,
+  BarChart,
+  Code,
+  LineChart,
+  Sparkles,
+  Clock
+} from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import EmptyState from '@/components/EmptyState';
 import { Notebook } from '@/types/notebook';
 import { getAutomationsForNotebook, Automation } from '@/mocks/automations';
+
+// Icon mapping
+const iconMap = {
+  BookOpen,
+  BarChart,
+  Code,
+  LineChart,
+  Sparkles,
+  Clock,
+  FileText,
+  Wand2,
+  Search,
+  Filter
+};
 
 export default function Studio() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -51,6 +79,14 @@ export default function Studio() {
     { id: 'organization', label: 'Organization' },
     { id: 'reminder', label: 'Reminder' }
   ];
+  
+  const renderIcon = (automation: Automation) => {
+    const IconComponent = iconMap[automation.iconName as keyof typeof iconMap];
+    if (IconComponent) {
+      return <IconComponent size={20} color={automation.iconColor} />;
+    }
+    return <Wand2 size={20} color={automation.iconColor} />;
+  };
   
   const styles = StyleSheet.create({
     container: {
@@ -247,7 +283,7 @@ export default function Studio() {
             <View key={`${automation.id}-${index}`} style={styles.card}>
               <View style={styles.cardHeader}>
                 <View style={styles.iconContainer}>
-                  {automation.icon}
+                  {renderIcon(automation)}
                 </View>
                 <Text style={styles.cardTitle}>{automation.title}</Text>
                 <ChevronRight size={20} color={colors.textSecondary} />
