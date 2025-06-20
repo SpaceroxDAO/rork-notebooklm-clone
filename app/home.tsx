@@ -6,7 +6,6 @@ import { useNotebookStore } from '@/store/notebookStore';
 import NotebookCard from '@/components/NotebookCard';
 import EmptyState from '@/components/EmptyState';
 import { useThemeColors } from '@/hooks/useThemeColors';
-import { mockNotebooks } from '@/mocks/notebooks';
 
 export default function Home() {
   const router = useRouter();
@@ -15,15 +14,6 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('recent');
   const [showSettings, setShowSettings] = useState(false);
-  
-  // Add mock notebook to store if none exist
-  useEffect(() => {
-    if (notebooks.length === 0) {
-      // Add only one mock notebook to store if none exist
-      const mockNotebook = mockNotebooks[0];
-      createNotebook(mockNotebook.title, mockNotebook.emoji);
-    }
-  }, []);
   
   const filteredNotebooks = notebooks.filter((notebook) => 
     notebook.title.toLowerCase().includes(searchQuery.toLowerCase())
