@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, TextInput, Alert, ScrollView } from 'react-native';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
-import { FileText, MoreVertical, MessageSquare, Wand2, Trash2, Edit } from 'lucide-react-native';
+import { FileText, MoreVertical, MessageSquare, Wand2, Trash2, Edit, ArrowLeft } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import SourceItem from '@/components/SourceItem';
@@ -75,6 +75,10 @@ export default function NotebookDetail() {
   
   const handleOpenSources = () => {
     router.push(`/sources/${notebook.id}`);
+  };
+
+  const handleBackToHome = () => {
+    router.push('/home');
   };
   
   const styles = StyleSheet.create({
@@ -238,6 +242,16 @@ export default function NotebookDetail() {
     deleteOption: {
       color: colors.error,
     },
+    backButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 12,
+    },
+    backButtonText: {
+      color: colors.primary,
+      fontSize: 16,
+      marginLeft: 4,
+    },
   });
 
   return (
@@ -279,6 +293,11 @@ export default function NotebookDetail() {
       )}
       
       <View style={styles.header}>
+        <Pressable style={styles.backButton} onPress={handleBackToHome}>
+          <ArrowLeft size={16} color={colors.primary} />
+          <Text style={styles.backButtonText}>Back to Notebooks</Text>
+        </Pressable>
+        
         <Text style={styles.emoji}>{notebook.emoji}</Text>
         
         {isEditingTitle ? (
@@ -317,7 +336,7 @@ export default function NotebookDetail() {
           <EmptyState
             title="No sources yet"
             description="Add sources to get started with your notebook"
-            icon={React.createElement(FileText, { size: 64, color: colors.textSecondary })}
+            icon={<FileText size={64} color={colors.textSecondary} />}
           />
         ) : (
           notebook.sources.map((source) => (

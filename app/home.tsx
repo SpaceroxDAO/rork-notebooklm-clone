@@ -16,10 +16,10 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState('recent');
   const [showSettings, setShowSettings] = useState(false);
   
-  // Combine store notebooks with mock notebooks for demo purposes
+  // Add mock notebook to store if none exist
   useEffect(() => {
     if (notebooks.length === 0) {
-      // Add mock notebooks to store if none exist
+      // Add mock notebook to store if none exist
       mockNotebooks.forEach(notebook => {
         createNotebook(notebook.title, notebook.emoji);
       });
@@ -213,7 +213,7 @@ export default function Home() {
         <EmptyState
           title="No notebooks yet"
           description="Create your first notebook to get started"
-          icon={React.createElement(Plus, { size: 64, color: colors.textSecondary })}
+          icon={<Plus size={64} color={colors.textSecondary} />}
         />
       ) : (
         <FlatList
