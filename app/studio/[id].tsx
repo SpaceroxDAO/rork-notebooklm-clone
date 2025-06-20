@@ -95,7 +95,7 @@ export default function Studio() {
       backgroundColor: colors.background,
     },
     headerButton: {
-      paddingHorizontal: 4,
+      paddingHorizontal: 8,
       paddingVertical: 4,
     },
     searchContainer: {
