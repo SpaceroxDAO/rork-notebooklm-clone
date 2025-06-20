@@ -34,7 +34,7 @@ const generateGenericAutomations = (notebook: Notebook): Automation[] => {
     notebookId: notebook.id,
     title: "Generate Summary",
     description: `Create a concise summary of all your sources in "${notebook.title}".`,
-    icon: React.createElement(BookOpen, { size: 20, color: "#4285F4" }),
+    icon: <BookOpen size={20} color="#4285F4" />,
     category: 'summary'
   });
   
@@ -44,7 +44,7 @@ const generateGenericAutomations = (notebook: Notebook): Automation[] => {
       notebookId: notebook.id,
       title: "Extract Key Insights",
       description: "Identify and extract the most important insights from your conversations.",
-      icon: React.createElement(Sparkles, { size: 20, color: "#34A853" }),
+      icon: <Sparkles size={20} color="#34A853" />,
       category: 'analysis'
     });
   }
@@ -54,7 +54,7 @@ const generateGenericAutomations = (notebook: Notebook): Automation[] => {
     notebookId: notebook.id,
     title: "Schedule Weekly Review",
     description: `Set up a weekly reminder to review and update "${notebook.title}".`,
-    icon: React.createElement(Clock, { size: 20, color: "#FBBC05" }),
+    icon: <Clock size={20} color="#FBBC05" />,
     category: 'reminder'
   });
   
@@ -68,7 +68,7 @@ export const mockAutomations: Automation[] = [
     notebookId: '1',
     title: "Compare ML Models",
     description: "Generate a comparison table of different machine learning models discussed in your sources.",
-    icon: React.createElement(BarChart, { size: 20, color: "#4285F4" }),
+    icon: <BarChart size={20} color="#4285F4" />,
     category: 'analysis'
   },
   {
@@ -76,7 +76,7 @@ export const mockAutomations: Automation[] = [
     notebookId: '1',
     title: "Create ML Glossary",
     description: "Extract and define key machine learning terms from your sources.",
-    icon: React.createElement(BookOpen, { size: 20, color: "#34A853" }),
+    icon: <BookOpen size={20} color="#34A853" />,
     category: 'organization'
   },
   {
@@ -84,7 +84,7 @@ export const mockAutomations: Automation[] = [
     notebookId: '1',
     title: "Generate Code Snippets",
     description: "Create TensorFlow/PyTorch code examples based on the neural network concepts in your sources.",
-    icon: React.createElement(Code, { size: 20, color: "#FBBC05" }),
+    icon: <Code size={20} color="#FBBC05" />,
     category: 'analysis'
   },
   {
@@ -92,7 +92,7 @@ export const mockAutomations: Automation[] = [
     notebookId: '1',
     title: "Track Research Progress",
     description: "Create a timeline of your machine learning research and identify knowledge gaps.",
-    icon: React.createElement(LineChart, { size: 20, color: "#EA4335" }),
+    icon: <LineChart size={20} color="#EA4335" />,
     category: 'organization'
   },
   {
@@ -100,7 +100,7 @@ export const mockAutomations: Automation[] = [
     notebookId: '1',
     title: "ML Paper Summarizer",
     description: "Automatically generate summaries of new machine learning papers you add.",
-    icon: React.createElement(FileText, { size: 20, color: "#4285F4" }),
+    icon: <FileText size={20} color="#4285F4" />,
     category: 'summary'
   }
 ];

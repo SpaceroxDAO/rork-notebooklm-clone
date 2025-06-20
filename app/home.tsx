@@ -19,10 +19,9 @@ export default function Home() {
   // Add mock notebook to store if none exist
   useEffect(() => {
     if (notebooks.length === 0) {
-      // Add mock notebook to store if none exist
-      mockNotebooks.forEach(notebook => {
-        createNotebook(notebook.title, notebook.emoji);
-      });
+      // Add only one mock notebook to store if none exist
+      const mockNotebook = mockNotebooks[0];
+      createNotebook(mockNotebook.title, mockNotebook.emoji);
     }
   }, []);
   

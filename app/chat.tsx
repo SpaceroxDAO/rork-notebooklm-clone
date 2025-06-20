@@ -12,7 +12,7 @@ import {
   Image
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Send, Plus, ChevronDown, BookOpen, X, List } from 'lucide-react-native';
+import { Send, Plus, ChevronDown, BookOpen, X, List, Settings } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import MessageBubble from '@/components/MessageBubble';
@@ -32,6 +32,7 @@ export default function GlobalChat() {
   const [isLoading, setIsLoading] = useState(false);
   const [showNotebookSelector, setShowNotebookSelector] = useState(false);
   const [selectedNotebooks, setSelectedNotebooks] = useState<string[]>([]);
+  const [showSettings, setShowSettings] = useState(false);
   
   const flatListRef = useRef<FlatList>(null);
   
@@ -196,6 +197,16 @@ export default function GlobalChat() {
     headerButton: {
       padding: 8,
       marginLeft: 8,
+    },
+    profileButton: {
+      width: 32,
+      height: 32,
+      borderRadius: 16,
+      overflow: 'hidden',
+    },
+    profileImage: {
+      width: '100%',
+      height: '100%',
     },
     selectedNotebooks: {
       flexDirection: 'row',
@@ -423,6 +434,30 @@ export default function GlobalChat() {
       fontWeight: 'bold',
       fontSize: 16,
     },
+    settingsDropdown: {
+      position: 'absolute',
+      top: 50,
+      right: 16,
+      backgroundColor: colors.card,
+      borderRadius: 8,
+      padding: 8,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+      elevation: 5,
+      zIndex: 1000,
+    },
+    settingsItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 12,
+    },
+    settingsText: {
+      color: colors.text,
+      marginLeft: 8,
+      fontSize: 16,
+    },
   });
 
   return (
@@ -438,12 +473,48 @@ export default function GlobalChat() {
           </Pressable>
           <Pressable 
             style={styles.headerButton}
-            onPress={handleClearChat}
+            onPress={() => setShowSettings(!showSettings)}
           >
-            <Text style={{ color: colors.textSecondary }}>Clear</Text>
+            <Image 
+              source={{ uri: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80' }} 
+              style={styles.profileImage} 
+            />
           </Pressable>
         </View>
       </View>
+      
+      {showSettings && (
+        <View style={styles.settingsDropdown}>
+          <Pressable 
+            style={styles.settingsItem}
+            onPress={() => {
+              setShowSettings(false);
+              router.push('/settings');
+            }}
+          >
+            <Settings size={18} color={colors.text} />
+            <Text style={styles.settingsText}>Settings</Text>
+          </Pressable>
+          <Pressable 
+            style={styles.settingsItem}
+            onPress={() => {
+              setShowSettings(false);
+              handleClearChat();
+            }}
+          >
+            <Text style={styles.settingsText}>Clear Chat</Text>
+          </Pressable>
+          <Pressable 
+            style={styles.settingsItem}
+            onPress={() => {
+              setShowSettings(false);
+              router.push('/login');
+            }}
+          >
+            <Text style={styles.settingsText}>Sign out</Text>
+          </Pressable>
+        </View>
+      )}
       
       <View style={styles.selectedNotebooks}>
         <Pressable 
