@@ -471,7 +471,7 @@ export default function GlobalChat() {
           <View style={styles.notebooksRow}>
             {notebooks.slice(0, 4).map((notebook) => (
               <Pressable 
-                key={`notebook-${notebook.id}`}
+                key={notebook.id}
                 style={styles.notebookButton}
                 onPress={() => handleNotebookClick(notebook.id)}
               >
@@ -483,18 +483,20 @@ export default function GlobalChat() {
                 </Text>
               </Pressable>
             ))}
-            <Pressable 
-              key="new-notebook"
-              style={styles.notebookButton}
-              onPress={() => router.push('/home')}
-            >
-              <View style={styles.notebookIcon}>
-                <Plus size={24} color={colors.text} />
-              </View>
-              <Text style={styles.notebookName}>
-                New
-              </Text>
-            </Pressable>
+            {notebooks.length > 0 && (
+              <Pressable 
+                key="new-notebook"
+                style={styles.notebookButton}
+                onPress={() => router.push('/home')}
+              >
+                <View style={styles.notebookIcon}>
+                  <Plus size={24} color={colors.text} />
+                </View>
+                <Text style={styles.notebookName}>
+                  New
+                </Text>
+              </Pressable>
+            )}
           </View>
           
           <Pressable 
