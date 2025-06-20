@@ -14,7 +14,8 @@ import {
   Code,
   LineChart,
   Sparkles,
-  Clock
+  Clock,
+  MoreVertical
 } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
@@ -94,7 +95,7 @@ export default function Studio() {
       backgroundColor: colors.background,
     },
     headerButton: {
-      paddingHorizontal: 8,
+      paddingHorizontal: 4,
       paddingVertical: 4,
     },
     searchContainer: {
@@ -141,6 +142,7 @@ export default function Studio() {
       flex: 1,
       padding: 16,
       paddingTop: 0,
+      paddingBottom: 80,
     },
     sectionTitle: {
       fontSize: 18,
@@ -195,9 +197,14 @@ export default function Studio() {
       marginRight: 8,
     },
     bottomNav: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
       flexDirection: 'row',
       borderTopWidth: 1,
       borderTopColor: colors.border,
+      backgroundColor: colors.background,
       paddingVertical: 8,
     },
     navButton: {
@@ -226,8 +233,8 @@ export default function Studio() {
         options={{
           title: "Automate",
           headerRight: () => (
-            <Pressable style={styles.headerButton} onPress={() => console.log("Create custom automation")}>
-              <Wand2 size={24} color={colors.text} />
+            <Pressable style={styles.headerButton}>
+              <MoreVertical size={24} color={colors.text} />
             </Pressable>
           ),
         }}

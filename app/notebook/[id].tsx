@@ -87,7 +87,7 @@ export default function NotebookDetail() {
       backgroundColor: colors.background,
     },
     headerButton: {
-      paddingHorizontal: 8,
+      paddingHorizontal: 4,
       paddingVertical: 4,
     },
     header: {

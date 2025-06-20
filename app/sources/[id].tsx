@@ -81,7 +81,7 @@ export default function Sources() {
       backgroundColor: colors.background,
     },
     headerButton: {
-      paddingHorizontal: 8,
+      paddingHorizontal: 4,
       paddingVertical: 4,
     },
     header: {

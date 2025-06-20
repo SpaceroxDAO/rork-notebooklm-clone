@@ -5,7 +5,7 @@ export interface Automation {
   notebookId: string;
   title: string;
   description: string;
-  iconName: string; // Changed from icon to iconName
+  iconName: string;
   iconColor: string;
   category: 'summary' | 'analysis' | 'visualization' | 'organization' | 'reminder';
 }
