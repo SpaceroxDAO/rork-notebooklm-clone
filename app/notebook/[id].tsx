@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, TextInput, Alert, ScrollView } from 'react-native';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
-import { FileText, MoreVertical, MessageSquare, Wand2 } from 'lucide-react-native';
+import { FileText, MoreVertical, MessageSquare, Wand2, Trash2, Edit } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import SourceItem from '@/components/SourceItem';
@@ -262,6 +262,7 @@ export default function NotebookDetail() {
               setIsEditingTitle(true);
             }}
           >
+            <Edit size={20} color={colors.text} />
             <Text style={styles.optionText}>Rename</Text>
           </Pressable>
           <Pressable 
@@ -271,6 +272,7 @@ export default function NotebookDetail() {
               handleDeleteNotebook();
             }}
           >
+            <Trash2 size={20} color={colors.error} />
             <Text style={[styles.optionText, styles.deleteOption]}>Delete</Text>
           </Pressable>
         </View>
@@ -315,7 +317,7 @@ export default function NotebookDetail() {
           <EmptyState
             title="No sources yet"
             description="Add sources to get started with your notebook"
-            icon={<FileText size={64} color={colors.textSecondary} />}
+            icon={React.createElement(FileText, { size: 64, color: colors.textSecondary })}
           />
         ) : (
           notebook.sources.map((source) => (

@@ -43,7 +43,7 @@ export default function GlobalChat() {
   
   // Generate a truly unique ID
   const generateUniqueId = (prefix: string) => {
-    return `${prefix}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}-${Math.random().toString(36).substring(2, 9)}`;
+    return `${prefix}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
   };
   
   const handleSendMessage = async () => {

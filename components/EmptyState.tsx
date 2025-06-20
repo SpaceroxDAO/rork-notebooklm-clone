@@ -48,7 +48,7 @@ export default function EmptyState({ title, description, icon, imageUrl }: Empty
       ) : icon ? (
         icon
       ) : (
-        <File size={64} color={colors.textSecondary} />
+        React.createElement(File, { size: 64, color: colors.textSecondary })
       )}
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>

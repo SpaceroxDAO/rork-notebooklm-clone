@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable, TextInput, Image, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Search, Plus, Settings, MessageSquare } from 'lucide-react-native';
+import { Search, Plus, Settings, MessageSquare, List } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import NotebookCard from '@/components/NotebookCard';
 import EmptyState from '@/components/EmptyState';
@@ -213,7 +213,7 @@ export default function Home() {
         <EmptyState
           title="No notebooks yet"
           description="Create your first notebook to get started"
-          icon={<Plus size={64} color={colors.textSecondary} />}
+          icon={React.createElement(Plus, { size: 64, color: colors.textSecondary })}
         />
       ) : (
         <FlatList
