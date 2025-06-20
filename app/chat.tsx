@@ -12,7 +12,7 @@ import {
   Image
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Send, Plus, ChevronDown, BookOpen, X } from 'lucide-react-native';
+import { Send, Plus, ChevronDown, BookOpen, X, List } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import MessageBubble from '@/components/MessageBubble';
@@ -189,8 +189,13 @@ export default function GlobalChat() {
       fontWeight: 'bold',
       color: colors.text,
     },
+    headerActions: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
     headerButton: {
       padding: 8,
+      marginLeft: 8,
     },
     selectedNotebooks: {
       flexDirection: 'row',
@@ -259,6 +264,21 @@ export default function GlobalChat() {
       fontSize: 12,
       color: colors.text,
       textAlign: 'center',
+    },
+    seeAllButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.card,
+      borderRadius: 24,
+      paddingVertical: 10,
+      paddingHorizontal: 16,
+      marginTop: 16,
+    },
+    seeAllButtonText: {
+      color: colors.text,
+      fontWeight: '500',
+      marginLeft: 8,
     },
     loadingContainer: {
       flexDirection: 'row',
@@ -409,12 +429,20 @@ export default function GlobalChat() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>NotebookLM</Text>
-        <Pressable 
-          style={styles.headerButton}
-          onPress={handleClearChat}
-        >
-          <Text style={{ color: colors.textSecondary }}>Clear</Text>
-        </Pressable>
+        <View style={styles.headerActions}>
+          <Pressable 
+            style={styles.headerButton}
+            onPress={() => router.push('/home')}
+          >
+            <List size={24} color={colors.text} />
+          </Pressable>
+          <Pressable 
+            style={styles.headerButton}
+            onPress={handleClearChat}
+          >
+            <Text style={{ color: colors.textSecondary }}>Clear</Text>
+          </Pressable>
+        </View>
       </View>
       
       <View style={styles.selectedNotebooks}>
@@ -443,7 +471,7 @@ export default function GlobalChat() {
           <View style={styles.notebooksRow}>
             {notebooks.slice(0, 4).map((notebook) => (
               <Pressable 
-                key={notebook.id} 
+                key={`notebook-${notebook.id}`}
                 style={styles.notebookButton}
                 onPress={() => handleNotebookClick(notebook.id)}
               >
@@ -456,6 +484,7 @@ export default function GlobalChat() {
               </Pressable>
             ))}
             <Pressable 
+              key="new-notebook"
               style={styles.notebookButton}
               onPress={() => router.push('/home')}
             >
@@ -468,7 +497,15 @@ export default function GlobalChat() {
             </Pressable>
           </View>
           
-          <Text style={styles.welcomeDescription}>
+          <Pressable 
+            style={styles.seeAllButton}
+            onPress={() => router.push('/home')}
+          >
+            <List size={20} color={colors.text} />
+            <Text style={styles.seeAllButtonText}>See All Notebooks</Text>
+          </Pressable>
+          
+          <Text style={[styles.welcomeDescription, { marginTop: 24 }]}>
             Try asking:
           </Text>
           <Text style={[styles.welcomeDescription, { fontStyle: 'italic' }]}>
