@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
 import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
-import { FileText, MessageSquare, Wand2, Plus, MoreVertical, ArrowLeft } from 'lucide-react-native';
+import { FileText, MessageSquare, Wand2, Plus, MoreVertical } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import EmptyState from '@/components/EmptyState';
@@ -64,10 +64,6 @@ export default function Sources() {
         }
       ]
     );
-  };
-
-  const handleBackToHome = () => {
-    router.push('/home');
   };
 
   const handleOpenChat = () => {
@@ -194,11 +190,6 @@ export default function Sources() {
       <Stack.Screen
         options={{
           title: notebook.title,
-          headerLeft: () => (
-            <Pressable style={styles.headerButton} onPress={handleBackToHome}>
-              <ArrowLeft size={24} color={colors.text} />
-            </Pressable>
-          ),
           headerRight: () => (
             <Pressable style={styles.headerButton}>
               <MoreVertical size={24} color={colors.text} />
