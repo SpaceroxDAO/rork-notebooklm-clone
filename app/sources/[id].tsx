@@ -178,7 +178,7 @@ export default function Sources() {
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: notebook.title,
+          title: "Sources",
           headerRight: () => (
             <Pressable style={styles.headerButton}>
               <MoreVertical size={24} color={colors.text} />
