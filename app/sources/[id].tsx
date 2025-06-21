@@ -1,26 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
 import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
 import { FileText, MessageSquare, Wand2, Plus, MoreVertical } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import EmptyState from '@/components/EmptyState';
+import AddSourceModal from '@/components/AddSourceModal';
 
 export default function Sources() {
   const { id, sourceId } = useLocalSearchParams<{ id: string; sourceId?: string }>();
   const router = useRouter();
   const colors = useThemeColors();
-  const { notebooks, removeSource } = useNotebookStore();
-  
-  const [selectedSources, setSelectedSources] = useState<string[]>([]);
+  const { notebooks, removeSource, addSource } = useNotebookStore();
+  const [isAddSourceModalVisible, setIsAddSourceModalVisible] = useState(false);
   
   const notebook = notebooks.find((n) => n.id === id);
-  
-  useEffect(() => {
-    if (sourceId) {
-      setSelectedSources([sourceId]);
-    }
-  }, [sourceId]);
   
   if (!notebook) {
     return (
@@ -31,41 +25,6 @@ export default function Sources() {
     );
   }
   
-  const handleSourcePress = (sourceId: string) => {
-    setSelectedSources((prev) => {
-      if (prev.includes(sourceId)) {
-        return prev.filter((id) => id !== sourceId);
-      } else {
-        return [...prev, sourceId];
-      }
-    });
-  };
-  
-  const handleDeleteSelected = () => {
-    if (selectedSources.length === 0) return;
-    
-    Alert.alert(
-      "Delete Sources",
-      `Are you sure you want to delete ${selectedSources.length} source${selectedSources.length > 1 ? 's' : ''}?`,
-      [
-        { text: "Cancel", style: "cancel" },
-        { 
-          text: "Delete", 
-          style: "destructive",
-          onPress: () => {
-            selectedSources.forEach((sourceId) => {
-              removeSource(notebook.id, sourceId);
-            });
-            setSelectedSources([]);
-            if (notebook.sources.length === selectedSources.length) {
-              router.back();
-            }
-          }
-        }
-      ]
-    );
-  };
-
   const handleOpenChat = () => {
     router.push(`/chat/${notebook.id}`);
   };
@@ -74,11 +33,12 @@ export default function Sources() {
     router.push(`/studio/${notebook.id}`);
   };
 
+  const handleAddSource = (source: { type: 'pdf' | 'website' | 'youtube' | 'text'; title: string; content?: string; url?: string }) => {
+    addSource(notebook.id, source);
+  };
+
   const renderSourceItem = ({ item }: { item: any }) => (
-    <Pressable
-      style={styles.sourceItem}
-      onPress={() => handleSourcePress(item.id)}
-    >
+    <Pressable style={styles.sourceItem}>
       <FileText size={20} color="#4285F4" style={styles.sourceIcon} />
       <Text style={[styles.sourceTitle, { color: colors.text }]} numberOfLines={2}>
         {item.title}
@@ -95,18 +55,27 @@ export default function Sources() {
       paddingHorizontal: 4,
       paddingVertical: 4,
     },
+    sourcesHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: 16,
+      paddingBottom: 8,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: colors.text,
+    },
     sourcesList: {
       flex: 1,
       paddingHorizontal: 16,
-      paddingTop: 16,
       paddingBottom: 120,
     },
     sourceItem: {
       flexDirection: 'row',
       alignItems: 'center',
       paddingVertical: 16,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.border,
     },
     sourceIcon: {
       marginRight: 16,
@@ -178,7 +147,7 @@ export default function Sources() {
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: "Sources",
+          title: notebook.title,
           headerRight: () => (
             <Pressable style={styles.headerButton}>
               <MoreVertical size={24} color={colors.text} />
@@ -186,6 +155,13 @@ export default function Sources() {
           ),
         }}
       />
+      
+      <View style={styles.sourcesHeader}>
+        <Text style={styles.sectionTitle}>Sources</Text>
+        <Pressable style={styles.headerButton}>
+          <MoreVertical size={24} color={colors.text} />
+        </Pressable>
+      </View>
       
       {notebook.sources.length === 0 ? (
         <EmptyState
@@ -206,7 +182,7 @@ export default function Sources() {
       <View style={styles.addSourceContainer}>
         <Pressable 
           style={styles.addSourceButton}
-          onPress={() => Alert.alert("Add Source", "Add a new source to this notebook")}
+          onPress={() => setIsAddSourceModalVisible(true)}
         >
           <Plus size={20} color="#000000" />
           <Text style={styles.addSourceText}>Add a source</Text>
@@ -235,6 +211,12 @@ export default function Sources() {
           <Text style={styles.navButtonText}>Studio</Text>
         </Pressable>
       </View>
+
+      <AddSourceModal
+        visible={isAddSourceModalVisible}
+        onClose={() => setIsAddSourceModalVisible(false)}
+        onAddSource={handleAddSource}
+      />
     </View>
   );
 }
