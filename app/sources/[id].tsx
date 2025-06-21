@@ -84,7 +84,7 @@ export default function Sources() {
       onPress={() => handleSourcePress(item.id)}
     >
       <FileText size={20} color="#4285F4" style={styles.sourceIcon} />
-      <Text style={[styles.sourceTitle, { color: colors.text }]} numberOfLines={1}>
+      <Text style={[styles.sourceTitle, { color: colors.text }]} numberOfLines={2}>
         {item.title}
       </Text>
     </Pressable>
@@ -129,6 +129,7 @@ export default function Sources() {
     sourceTitle: {
       fontSize: 16,
       flex: 1,
+      lineHeight: 22,
     },
     addSourceContainer: {
       position: 'absolute',
