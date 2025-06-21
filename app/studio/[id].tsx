@@ -15,7 +15,8 @@ import {
   LineChart,
   Sparkles,
   Clock,
-  MoreVertical
+  MoreVertical,
+  ArrowLeft
 } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
@@ -87,6 +88,10 @@ export default function Studio() {
       return <IconComponent size={20} color={automation.iconColor} />;
     }
     return <Wand2 size={20} color={automation.iconColor} />;
+  };
+
+  const handleBackToHome = () => {
+    router.push('/home');
   };
   
   const styles = StyleSheet.create({
@@ -232,6 +237,11 @@ export default function Studio() {
       <Stack.Screen
         options={{
           title: "Automate",
+          headerLeft: () => (
+            <Pressable style={styles.headerButton} onPress={handleBackToHome}>
+              <ArrowLeft size={24} color={colors.text} />
+            </Pressable>
+          ),
           headerRight: () => (
             <Pressable style={styles.headerButton}>
               <MoreVertical size={24} color={colors.text} />

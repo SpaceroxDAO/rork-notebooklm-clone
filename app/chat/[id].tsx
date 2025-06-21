@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Pressable, FlatList, ActivityIndicator, Keyboard, ScrollView } from 'react-native';
 import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
-import { Send, FileText, MessageSquare, Wand2, MoreVertical, Copy, ThumbsUp, ThumbsDown, Volume2 } from 'lucide-react-native';
+import { Send, FileText, MessageSquare, Wand2, MoreVertical, Copy, ThumbsUp, ThumbsDown, Volume2, ArrowLeft } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import MessageBubble from '@/components/MessageBubble';
@@ -75,6 +75,10 @@ export default function Chat() {
   const handleCitationPress = (sourceId: string) => {
     // Navigate to source detail or highlight source
     router.push(`/sources/${notebook.id}?sourceId=${sourceId}`);
+  };
+
+  const handleBackToHome = () => {
+    router.push('/home');
   };
 
   const generateSummary = () => {
@@ -290,6 +294,11 @@ export default function Chat() {
       <Stack.Screen
         options={{
           title: notebook.title,
+          headerLeft: () => (
+            <Pressable style={styles.headerButton} onPress={handleBackToHome}>
+              <ArrowLeft size={24} color={colors.text} />
+            </Pressable>
+          ),
           headerRight: () => (
             <Pressable style={styles.headerButton}>
               <MoreVertical size={24} color={colors.text} />
