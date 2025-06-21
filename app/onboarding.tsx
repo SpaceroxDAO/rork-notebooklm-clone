@@ -1,107 +1,28 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, Pressable, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useThemeColors } from '@/hooks/useThemeColors';
-import { BookOpen, FileText, MessageSquare, Headphones } from 'lucide-react-native';
+import { Wifi } from 'lucide-react-native';
 
 const { width } = Dimensions.get('window');
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  slide: {
-    width,
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  iconContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  gradient: {
-    width: '100%',
-    padding: 24,
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
-    lineHeight: 24,
-  },
-  footer: {
-    padding: 24,
-    paddingBottom: 40,
-  },
-  pagination: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 24,
-  },
-  paginationDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginHorizontal: 4,
-  },
-  paginationDotActive: {
-    width: 16,
-  },
-  button: {
-    borderRadius: 24,
-    padding: 16,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  skipButton: {
-    alignItems: 'center',
-    padding: 16,
-  },
-  skipButtonText: {
-    fontSize: 16,
-  },
-});
 
 const slides = [
   {
     id: '1',
-    title: "Let's get started",
-    subtitle: "Create your first notebook below.",
-    icon: <BookOpen size={64} color="#4285F4" />,
+    title: "Add sources",
+    subtitle: "from anywhere",
+    description: "Look for NotebookLM in your share sheet to quickly add PDFs, websites, videos, & more",
   },
   {
     id: '2',
-    title: "Add sources from anywhere",
-    subtitle: "Look for NotebookLM in your share sheet to quickly add PDFs, websites, videos, & more",
-    icon: <FileText size={64} color="#34A853" />,
-    titleColor: '#34A853',
+    title: "Instant insights",
+    subtitle: "you can trust",
+    description: "Get answers to your questions, with inline citations to your sources",
   },
   {
     id: '3',
-    title: "Instant insights you can trust",
-    subtitle: "Get answers to your questions, with inline citations to your sources",
-    icon: <MessageSquare size={64} color="#4285F4" />,
-    titleColor: '#4285F4',
-  },
-  {
-    id: '4',
-    title: "Chat with all your knowledge",
-    subtitle: "Access insights across all your notebooks with a unified chat interface",
-    icon: <Headphones size={64} color="#34A853" />,
-    titleColor: '#34A853',
+    title: "Listen & learn",
+    subtitle: "on the go",
+    description: "Turn your sources into engaging audio discussions with one click",
   },
 ];
 
@@ -109,7 +30,6 @@ export default function Onboarding() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
   const router = useRouter();
-  const colors = useThemeColors();
   
   const handleScroll = (event: any) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
@@ -124,38 +44,41 @@ export default function Onboarding() {
         animated: true,
       });
     } else {
-      router.replace('/chat'); // Changed from /home to /chat
+      router.replace('/chat');
     }
   };
   
   const goToHome = () => {
-    router.replace('/chat'); // Changed from /home to /chat
+    router.replace('/chat');
   };
 
+  const renderSlide = ({ item }: { item: typeof slides[0] }) => (
+    <View style={styles.slide}>
+      <View style={styles.content}>
+        <Text style={styles.title}>{item.title}</Text>
+        <Text style={styles.subtitle}>{item.subtitle}</Text>
+        <Text style={styles.description}>{item.description}</Text>
+      </View>
+    </View>
+  );
+
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Wifi size={16} color="#FFFFFF" />
+        <Text style={styles.headerTitle}>NotebookLM</Text>
+      </View>
+      
       <FlatList
         ref={flatListRef}
         data={slides}
-        renderItem={({ item }) => (
-          <View style={styles.slide}>
-            <View style={styles.iconContainer}>
-              {item.icon}
-            </View>
-            <LinearGradient
-              colors={['transparent', colors.background]}
-              style={styles.gradient}
-            >
-              <Text style={[styles.title, { color: item.titleColor || colors.text }]}>{item.title}</Text>
-              <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{item.subtitle}</Text>
-            </LinearGradient>
-          </View>
-        )}
+        renderItem={renderSlide}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={handleScroll}
         keyExtractor={(item) => item.id}
+        style={styles.slideContainer}
       />
       
       <View style={styles.footer}>
@@ -165,28 +88,127 @@ export default function Onboarding() {
               key={index}
               style={[
                 styles.paginationDot,
-                { backgroundColor: index === currentIndex ? colors.primary : colors.border },
-                index === currentIndex && styles.paginationDotActive,
+                index === currentIndex ? styles.paginationDotActive : styles.paginationDotInactive,
               ]}
             />
           ))}
         </View>
         
-        <Pressable 
-          style={[styles.button, { backgroundColor: colors.primary }]} 
-          onPress={goToNextSlide}
-        >
-          <Text style={styles.buttonText}>
-            {currentIndex === slides.length - 1 ? 'Get started' : 'Get started'}
-          </Text>
+        <Pressable onPress={goToNextSlide}>
+          <Text style={styles.continueButton}>Continue</Text>
         </Pressable>
         
-        {currentIndex < slides.length - 1 && (
-          <Pressable style={styles.skipButton} onPress={goToHome}>
-            <Text style={[styles.skipButtonText, { color: colors.textSecondary }]}>Skip</Text>
-          </Pressable>
-        )}
+        <Text style={styles.googleText}>Google</Text>
+        
+        <Pressable style={styles.signInButton} onPress={goToHome}>
+          <Text style={styles.signInButtonText}>Sign In</Text>
+        </Pressable>
+        
+        <View style={styles.bottomLine} />
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#000000',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 60,
+    paddingHorizontal: 24,
+    paddingBottom: 20,
+  },
+  headerTitle: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '500',
+    marginLeft: 8,
+  },
+  slideContainer: {
+    flex: 1,
+  },
+  slide: {
+    width,
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
+  content: {
+    alignItems: 'flex-start',
+  },
+  title: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: '#34D399',
+    marginBottom: 8,
+    lineHeight: 56,
+  },
+  subtitle: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 32,
+    lineHeight: 56,
+  },
+  description: {
+    fontSize: 18,
+    color: '#9CA3AF',
+    lineHeight: 26,
+    maxWidth: '90%',
+  },
+  footer: {
+    alignItems: 'center',
+    paddingBottom: 40,
+    paddingHorizontal: 24,
+  },
+  pagination: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 60,
+  },
+  paginationDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 4,
+  },
+  paginationDotActive: {
+    backgroundColor: '#FFFFFF',
+  },
+  paginationDotInactive: {
+    backgroundColor: '#374151',
+  },
+  continueButton: {
+    color: '#3B82F6',
+    fontSize: 18,
+    fontWeight: '500',
+    marginBottom: 40,
+  },
+  googleText: {
+    color: '#9CA3AF',
+    fontSize: 16,
+    marginBottom: 20,
+  },
+  signInButton: {
+    backgroundColor: '#3B82F6',
+    borderRadius: 24,
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    marginBottom: 20,
+  },
+  signInButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  bottomLine: {
+    width: 134,
+    height: 5,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 2.5,
+  },
+});
