@@ -14,7 +14,7 @@ export default function NotebookCard({ notebook }: NotebookCardProps) {
   const colors = useThemeColors();
   
   const handlePress = () => {
-    router.push(`/notebook/${notebook.id}`);
+    router.push(`/chat/${notebook.id}`);
   };
   
   // Format date to relative time (e.g., "2 hours ago")
