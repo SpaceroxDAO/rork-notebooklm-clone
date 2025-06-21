@@ -95,21 +95,10 @@ export default function Sources() {
       paddingHorizontal: 4,
       paddingVertical: 4,
     },
-    sourcesHeader: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: 16,
-      paddingBottom: 8,
-    },
-    sectionTitle: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      color: colors.text,
-    },
     sourcesList: {
       flex: 1,
       paddingHorizontal: 16,
+      paddingTop: 16,
       paddingBottom: 120,
     },
     sourceItem: {
@@ -197,13 +186,6 @@ export default function Sources() {
           ),
         }}
       />
-      
-      <View style={styles.sourcesHeader}>
-        <Text style={styles.sectionTitle}>Sources</Text>
-        <Pressable style={styles.headerButton}>
-          <MoreVertical size={24} color={colors.text} />
-        </Pressable>
-      </View>
       
       {notebook.sources.length === 0 ? (
         <EmptyState
