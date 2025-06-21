@@ -187,7 +187,7 @@ export default function GlobalChat() {
       borderBottomColor: colors.border,
     },
     headerTitle: {
-      fontSize: 20,
+      fontSize: 24,
       fontWeight: 'bold',
       color: colors.text,
     },
