@@ -4,7 +4,6 @@ import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
 import { FileText, MessageSquare, Wand2, Plus, MoreVertical, ArrowLeft } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
-import SourceItem from '@/components/SourceItem';
 import EmptyState from '@/components/EmptyState';
 
 export default function Sources() {
@@ -78,6 +77,18 @@ export default function Sources() {
   const handleOpenStudio = () => {
     router.push(`/studio/${notebook.id}`);
   };
+
+  const renderSourceItem = ({ item }: { item: any }) => (
+    <Pressable
+      style={styles.sourceItem}
+      onPress={() => handleSourcePress(item.id)}
+    >
+      <FileText size={20} color="#4285F4" style={styles.sourceIcon} />
+      <Text style={[styles.sourceTitle, { color: colors.text }]} numberOfLines={1}>
+        {item.title}
+      </Text>
+    </Pressable>
+  );
   
   const styles = StyleSheet.create({
     container: {
@@ -88,56 +99,36 @@ export default function Sources() {
       paddingHorizontal: 4,
       paddingVertical: 4,
     },
-    header: {
+    sourcesHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
       padding: 16,
+      paddingBottom: 8,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: colors.text,
+    },
+    sourcesList: {
+      flex: 1,
+      paddingHorizontal: 16,
+      paddingBottom: 120,
+    },
+    sourceItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: 16,
       borderBottomWidth: 1,
       borderBottomColor: colors.border,
     },
-    emoji: {
-      fontSize: 40,
-      marginBottom: 8,
+    sourceIcon: {
+      marginRight: 16,
     },
-    title: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      color: colors.text,
-      marginBottom: 4,
-    },
-    meta: {
-      fontSize: 14,
-      color: colors.textSecondary,
-      marginBottom: 16,
-    },
-    selectAllButton: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    selectAllText: {
-      color: colors.text,
+    sourceTitle: {
       fontSize: 16,
-    },
-    checkbox: {
-      width: 20,
-      height: 20,
-      borderWidth: 2,
-      borderColor: colors.text,
-      borderRadius: 2,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    checkmark: {
-      width: 12,
-      height: 6,
-      borderLeftWidth: 2,
-      borderBottomWidth: 2,
-      borderColor: colors.text,
-      transform: [{ rotate: '-45deg' }],
-      marginTop: -2,
-    },
-    sourcesList: {
-      padding: 16,
-      paddingBottom: 120,
+      flex: 1,
     },
     addSourceContainer: {
       position: 'absolute',
@@ -152,26 +143,19 @@ export default function Sources() {
       alignItems: 'center',
       backgroundColor: '#FFFFFF',
       borderRadius: 24,
-      paddingVertical: 10,
-      paddingHorizontal: 16,
+      paddingVertical: 12,
+      paddingHorizontal: 20,
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.2,
       shadowRadius: 4,
       elevation: 5,
     },
-    addSourceIconContainer: {
-      width: 24,
-      height: 24,
-      borderRadius: 12,
-      backgroundColor: '#E8F0FE',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginRight: 8,
-    },
     addSourceText: {
       color: '#000000',
-      fontWeight: 'bold',
+      fontWeight: '500',
+      fontSize: 16,
+      marginLeft: 8,
     },
     bottomNav: {
       position: 'absolute',
@@ -222,31 +206,10 @@ export default function Sources() {
         }}
       />
       
-      <View style={styles.header}>
-        <Text style={styles.emoji}>{notebook.emoji}</Text>
-        <Text style={styles.title}>{notebook.title}</Text>
-        <Text style={styles.meta}>
-          {notebook.sources.length} {notebook.sources.length === 1 ? 'source' : 'sources'} • Created {new Date(notebook.createdAt).toLocaleDateString()}
-        </Text>
-        
-        <Pressable
-          style={styles.selectAllButton}
-          onPress={() => {
-            if (selectedSources.length === notebook.sources.length) {
-              setSelectedSources([]);
-            } else {
-              setSelectedSources(notebook.sources.map((source) => source.id));
-            }
-          }}
-        >
-          <Text style={styles.selectAllText}>
-            Select all
-          </Text>
-          <View style={styles.checkbox}>
-            {selectedSources.length === notebook.sources.length && (
-              <View style={styles.checkmark} />
-            )}
-          </View>
+      <View style={styles.sourcesHeader}>
+        <Text style={styles.sectionTitle}>Sources</Text>
+        <Pressable style={styles.headerButton}>
+          <MoreVertical size={24} color={colors.text} />
         </Pressable>
       </View>
       
@@ -259,15 +222,10 @@ export default function Sources() {
       ) : (
         <FlatList
           data={notebook.sources}
-          renderItem={({ item }) => (
-            <SourceItem
-              source={item}
-              selected={selectedSources.includes(item.id)}
-              onPress={() => handleSourcePress(item.id)}
-            />
-          )}
+          renderItem={renderSourceItem}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.sourcesList}
+          style={styles.sourcesList}
+          showsVerticalScrollIndicator={false}
         />
       )}
       
@@ -276,9 +234,7 @@ export default function Sources() {
           style={styles.addSourceButton}
           onPress={() => Alert.alert("Add Source", "Add a new source to this notebook")}
         >
-          <View style={styles.addSourceIconContainer}>
-            <Plus size={16} color="#4285F4" />
-          </View>
+          <Plus size={20} color="#000000" />
           <Text style={styles.addSourceText}>Add a source</Text>
         </Pressable>
       </View>
@@ -302,7 +258,7 @@ export default function Sources() {
           onPress={handleOpenStudio}
         >
           <Wand2 size={24} color={colors.textSecondary} />
-          <Text style={styles.navButtonText}>Automate</Text>
+          <Text style={styles.navButtonText}>Studio</Text>
         </Pressable>
       </View>
     </View>
