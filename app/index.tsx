@@ -43,7 +43,7 @@ export default function Index() {
       marginBottom: 16,
     },
     appName: {
-      fontSize: 24,
+      fontSize: 20,
       fontWeight: 'bold',
       color: colors.text,
     },

@@ -39,7 +39,7 @@ export default function Login() {
       marginBottom: 16,
     },
     appName: {
-      fontSize: 28,
+      fontSize: 20,
       fontWeight: 'bold',
       color: colors.text,
     },
