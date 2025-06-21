@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Pressable, FlatList, ActivityIndicator, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Pressable, FlatList, ActivityIndicator, Keyboard, ScrollView } from 'react-native';
 import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
-import { Send, FileText, MessageSquare, Wand2, MoreVertical } from 'lucide-react-native';
+import { Send, FileText, MessageSquare, Wand2, MoreVertical, Copy, ThumbsUp, ThumbsDown, Volume2 } from 'lucide-react-native';
 import { useNotebookStore } from '@/store/notebookStore';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import MessageBubble from '@/components/MessageBubble';
@@ -76,6 +76,26 @@ export default function Chat() {
     // Navigate to source detail or highlight source
     router.push(`/sources/${notebook.id}?sourceId=${sourceId}`);
   };
+
+  const generateSummary = () => {
+    if (notebook.sources.length === 0) {
+      return "No sources have been added to this notebook yet. Add sources to get started with AI-powered insights.";
+    }
+
+    // Generate a summary based on the sources
+    const sourceTypes = notebook.sources.map(s => s.type);
+    const hasMultipleTypes = new Set(sourceTypes).size > 1;
+    
+    let summary = `The provided sources outline comprehensive information for ${notebook.title}`;
+    
+    if (hasMultipleTypes) {
+      summary += `, including content from ${sourceTypes.includes('pdf') ? 'PDFs' : ''}${sourceTypes.includes('website') ? ', websites' : ''}${sourceTypes.includes('youtube') ? ', videos' : ''}${sourceTypes.includes('text') ? ', and text documents' : ''}`;
+    }
+    
+    summary += `. They detail key concepts, methodologies, and insights relevant to the topic. The sources provide a foundation for understanding the subject matter and can be used to generate detailed responses to your questions.`;
+    
+    return summary;
+  };
   
   const styles = StyleSheet.create({
     container: {
@@ -85,6 +105,62 @@ export default function Chat() {
     headerButton: {
       paddingHorizontal: 4,
       paddingVertical: 4,
+    },
+    summaryContainer: {
+      padding: 16,
+      paddingBottom: 120,
+    },
+    notebookHeader: {
+      alignItems: 'center',
+      marginBottom: 24,
+    },
+    emoji: {
+      fontSize: 48,
+      marginBottom: 12,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: colors.text,
+      textAlign: 'center',
+      marginBottom: 8,
+    },
+    sourceCount: {
+      fontSize: 16,
+      color: colors.textSecondary,
+      textAlign: 'center',
+    },
+    summaryText: {
+      fontSize: 16,
+      color: colors.text,
+      lineHeight: 24,
+      marginBottom: 24,
+    },
+    actionButtons: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      marginBottom: 24,
+      paddingHorizontal: 40,
+    },
+    actionButton: {
+      padding: 12,
+      borderRadius: 8,
+    },
+    audioOverviewButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.card,
+      borderRadius: 24,
+      paddingVertical: 12,
+      paddingHorizontal: 20,
+      marginBottom: 24,
+    },
+    audioOverviewText: {
+      color: colors.text,
+      fontSize: 16,
+      fontWeight: '500',
+      marginLeft: 8,
     },
     messagesList: {
       padding: 16,
@@ -176,6 +252,39 @@ export default function Chat() {
     },
   });
 
+  const renderSummaryView = () => (
+    <ScrollView style={styles.summaryContainer}>
+      <View style={styles.notebookHeader}>
+        <Text style={styles.emoji}>{notebook.emoji}</Text>
+        <Text style={styles.title}>{notebook.title}</Text>
+        <Text style={styles.sourceCount}>
+          {notebook.sources.length} {notebook.sources.length === 1 ? 'source' : 'sources'}
+        </Text>
+      </View>
+      
+      <Text style={styles.summaryText}>
+        {generateSummary()}
+      </Text>
+      
+      <View style={styles.actionButtons}>
+        <Pressable style={styles.actionButton}>
+          <Copy size={24} color={colors.textSecondary} />
+        </Pressable>
+        <Pressable style={styles.actionButton}>
+          <ThumbsUp size={24} color={colors.textSecondary} />
+        </Pressable>
+        <Pressable style={styles.actionButton}>
+          <ThumbsDown size={24} color={colors.textSecondary} />
+        </Pressable>
+      </View>
+      
+      <Pressable style={styles.audioOverviewButton}>
+        <Volume2 size={20} color={colors.text} />
+        <Text style={styles.audioOverviewText}>Audio Overview</Text>
+      </Pressable>
+    </ScrollView>
+  );
+
   return (
     <View style={styles.container}>
       <Stack.Screen
@@ -190,11 +299,7 @@ export default function Chat() {
       />
       
       {notebook.messages.length === 0 ? (
-        <EmptyState
-          title="Ask a question"
-          description="Ask questions about your sources to get AI-generated insights with citations"
-          icon={<MessageSquare size={64} color={colors.textSecondary} />}
-        />
+        renderSummaryView()
       ) : (
         <FlatList
           ref={flatListRef}
@@ -222,7 +327,7 @@ export default function Chat() {
         <View style={styles.inputRow}>
           <TextInput
             style={styles.input}
-            placeholder={`Ask ${notebook.sources.length} sources...`}
+            placeholder={`Ask ${notebook.sources.length} ${notebook.sources.length === 1 ? 'source' : 'sources'}...`}
             placeholderTextColor={colors.textSecondary}
             value={message}
             onChangeText={setMessage}
@@ -261,7 +366,7 @@ export default function Chat() {
           onPress={() => router.push(`/studio/${notebook.id}`)}
         >
           <Wand2 size={24} color={colors.textSecondary} />
-          <Text style={styles.navButtonText}>Automate</Text>
+          <Text style={styles.navButtonText}>Studio</Text>
         </Pressable>
       </View>
     </View>

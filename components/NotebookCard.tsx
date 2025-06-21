@@ -14,6 +14,7 @@ export default function NotebookCard({ notebook }: NotebookCardProps) {
   const colors = useThemeColors();
   
   const handlePress = () => {
+    // Navigate to chat instead of sources
     router.push(`/chat/${notebook.id}`);
   };
   
