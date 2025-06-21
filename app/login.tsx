@@ -39,8 +39,8 @@ export default function Login() {
       marginBottom: 16,
     },
     appName: {
-      fontSize: 24,
-      fontWeight: 'bold',
+      fontSize: 20,
+      fontWeight: '600',
       color: colors.text,
     },
     welcomeText: {

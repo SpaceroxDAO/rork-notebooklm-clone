@@ -56,8 +56,8 @@ export default function Home() {
       alignItems: 'center',
     },
     appTitle: {
-      fontSize: 24,
-      fontWeight: 'bold',
+      fontSize: 20,
+      fontWeight: '600',
       color: colors.text,
     },
     headerActions: {
