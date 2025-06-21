@@ -72,10 +72,6 @@ export default function NotebookDetail() {
   const handleOpenStudio = () => {
     router.push(`/studio/${notebook.id}`);
   };
-  
-  const handleOpenSources = () => {
-    router.push(`/sources/${notebook.id}`);
-  };
 
   const handleBackToHome = () => {
     router.push('/home');
@@ -320,10 +316,7 @@ export default function NotebookDetail() {
       
       <View style={styles.sourcesHeader}>
         <Text style={styles.sectionTitle}>Sources</Text>
-        <Pressable 
-          style={styles.selectAllButton}
-          onPress={() => router.push(`/sources/${notebook.id}`)}
-        >
+        <Pressable style={styles.selectAllButton}>
           <Text style={styles.selectAllText}>Select all</Text>
           <View style={styles.checkbox} />
         </Pressable>
@@ -341,7 +334,6 @@ export default function NotebookDetail() {
             <SourceItem
               key={source.id}
               source={source}
-              onPress={handleOpenSources}
             />
           ))
         )}

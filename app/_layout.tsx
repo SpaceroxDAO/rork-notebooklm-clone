@@ -90,13 +90,6 @@ function RootLayoutNav() {
           }} 
         />
         <Stack.Screen 
-          name="sources/[id]" 
-          options={{ 
-            title: "Sources",
-            presentation: "modal",
-          }} 
-        />
-        <Stack.Screen 
           name="studio/[id]" 
           options={{ 
             title: "",

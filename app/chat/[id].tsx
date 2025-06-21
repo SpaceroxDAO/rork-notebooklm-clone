@@ -71,11 +71,6 @@ export default function Chat() {
       setIsLoading(false);
     }
   };
-  
-  const handleCitationPress = (sourceId: string) => {
-    // Navigate to source detail or highlight source
-    router.push(`/sources/${notebook.id}?sourceId=${sourceId}`);
-  };
 
   const handleBackToHome = () => {
     router.push('/home');
@@ -316,7 +311,6 @@ export default function Chat() {
           renderItem={({ item }) => (
             <MessageBubble
               message={item}
-              onCitationPress={handleCitationPress}
             />
           )}
           keyExtractor={(item) => item.id}

@@ -588,16 +588,6 @@ export default function GlobalChat() {
           renderItem={({ item }) => (
             <MessageBubble
               message={item}
-              onCitationPress={(sourceId) => {
-                // Find which notebook contains this source
-                for (const notebook of notebooks) {
-                  const source = notebook.sources.find(s => s.id === sourceId);
-                  if (source) {
-                    router.push(`/sources/${notebook.id}?sourceId=${sourceId}`);
-                    return;
-                  }
-                }
-              }}
             />
           )}
           keyExtractor={(item) => item.id}
