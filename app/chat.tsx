@@ -316,7 +316,6 @@ export default function GlobalChat() {
       borderTopWidth: 1,
       borderTopColor: colors.border,
       padding: 16,
-      paddingBottom: 40,
     },
     inputRow: {
       flexDirection: 'row',
@@ -349,7 +348,6 @@ export default function GlobalChat() {
       color: colors.textSecondary,
       fontSize: 12,
       marginTop: 8,
-      marginBottom: 8,
     },
     notebookSelectorButton: {
       flexDirection: 'row',
@@ -538,7 +536,7 @@ export default function GlobalChat() {
       {messages.length === 0 ? (
         <View style={styles.welcomeContainer}>
           <Text style={styles.welcomeTitle}>
-            Chat with all your notebooks
+            Ask a question
           </Text>
           <Text style={styles.welcomeDescription}>
             Ask questions across all your notebooks or select specific ones to focus your search.
@@ -582,13 +580,6 @@ export default function GlobalChat() {
             <List size={20} color={colors.text} />
             <Text style={styles.seeAllButtonText}>See All Notebooks</Text>
           </Pressable>
-          
-          <Text style={[styles.welcomeDescription, { marginTop: 24 }]}>
-            Try asking:
-          </Text>
-          <Text style={[styles.welcomeDescription, { fontStyle: 'italic' }]}>
-            "Summarize the key points from all my notebooks"
-          </Text>
         </View>
       ) : (
         <FlatList
@@ -626,7 +617,7 @@ export default function GlobalChat() {
         <View style={styles.inputRow}>
           <TextInput
             style={styles.input}
-            placeholder="Ask anything about your notebooks..."
+            placeholder={`Ask ${notebooks.length} ${notebooks.length === 1 ? 'notebook' : 'notebooks'}...`}
             placeholderTextColor={colors.textSecondary}
             value={message}
             onChangeText={setMessage}
