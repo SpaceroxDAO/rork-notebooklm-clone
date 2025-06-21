@@ -93,6 +93,21 @@ export default function Sources() {
       borderBottomWidth: 1,
       borderBottomColor: colors.border,
     },
+    emoji: {
+      fontSize: 40,
+      marginBottom: 8,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: colors.text,
+      marginBottom: 4,
+    },
+    meta: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      marginBottom: 16,
+    },
     selectAllButton: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -208,6 +223,12 @@ export default function Sources() {
       />
       
       <View style={styles.header}>
+        <Text style={styles.emoji}>{notebook.emoji}</Text>
+        <Text style={styles.title}>{notebook.title}</Text>
+        <Text style={styles.meta}>
+          {notebook.sources.length} {notebook.sources.length === 1 ? 'source' : 'sources'} • Created {new Date(notebook.createdAt).toLocaleDateString()}
+        </Text>
+        
         <Pressable
           style={styles.selectAllButton}
           onPress={() => {
